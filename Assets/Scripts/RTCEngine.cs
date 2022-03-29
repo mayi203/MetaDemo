@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 using agora_gaming_rtc;
@@ -10,7 +10,7 @@ using agora_utilities;
 // How to enable video
 // How to join/leave channel
 // 
-public class TestHelloUnityVideo
+public class RTCEngine
 {
 
     // instance of agora engine
@@ -123,7 +123,7 @@ public class TestHelloUnityVideo
     public void onSceneHelloVideoLoaded()
     {
         // Attach the SDK Script VideoSurface for video rendering
-        GameObject quad = GameObject.Find("Quad");
+        GameObject quad = GameObject.Find("LocalVideo");
         if (ReferenceEquals(quad, null))
         {
             Debug.Log("failed to find Quad");
@@ -134,7 +134,7 @@ public class TestHelloUnityVideo
             quad.AddComponent<VideoSurface>();
         }
 
-        GameObject cube = GameObject.Find("LocalVideo");
+        GameObject cube = GameObject.Find("Cube");
         if (ReferenceEquals(cube, null))
         {
             Debug.Log("failed to find Cube");
@@ -155,11 +155,11 @@ public class TestHelloUnityVideo
         if (bobj != null)
         {
             Button button = bobj.GetComponent<Button>();
-            if (button!=null)
+            if (button != null)
             {
                 button.onClick.AddListener(HandleHelp);
-	        }
-	    }
+            }
+        }
 
     }
 
@@ -179,6 +179,8 @@ public class TestHelloUnityVideo
         Debug.Log("JoinChannelSuccessHandler: uid = " + uid);
         GameObject textVersionGameObject = GameObject.Find("VersionText");
         textVersionGameObject.GetComponent<Text>().text = "SDK Version : " + getSdkVersion();
+        GameObject memberController = GameObject.Find("Controller");
+        memberController.GetComponent<RoomController>().AddUser(uid,true);
     }
 
     // When a remote user joined, this delegate will be called. Typically
@@ -195,15 +197,9 @@ public class TestHelloUnityVideo
             return; // reuse
         }
 
-        // create a GameObject and assign to this new user
-        VideoSurface videoSurface = makeImageSurface(uid.ToString());
-        if (!ReferenceEquals(videoSurface, null))
-        {
-            // configure videoSurface
-            videoSurface.SetForUser(uid);
-            videoSurface.SetEnable(true);
-            videoSurface.SetVideoSurfaceType(AgoraVideoSurfaceType.RawImage);
-        }
+        GameObject memberController = GameObject.Find("Controller");
+        memberController.GetComponent<RoomController>().AddUser(uid,false);
+        memberController.GetComponent<RoomController>().AddVideo(uid);
     }
 
     public VideoSurface makePlaneSurface(string goName)
@@ -270,6 +266,8 @@ public class TestHelloUnityVideo
         GameObject go = GameObject.Find(uid.ToString());
         if (!ReferenceEquals(go, null))
         {
+            GameObject memberController = GameObject.Find("MemberPositions");
+            memberController.GetComponent<RoomController>().RemoveUser(uid);
             Object.Destroy(go);
         }
     }
