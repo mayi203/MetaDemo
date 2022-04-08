@@ -116,6 +116,12 @@ public class Home : MonoBehaviour
         Destroy(gameObject);
     }
 
+    public void sendMessage(byte[] data) {
+        if (!ReferenceEquals(app, null)) {
+            app.sendMessage(data);
+        }
+    }
+
     public void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
     {
         if (scene.name == PlaySceneName)

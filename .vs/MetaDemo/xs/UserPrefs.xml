@@ -1,7 +1,9 @@
 ﻿<Properties StartupConfiguration="{034952F7-F1D2-9C92-6931-D2EDDEE66C0C}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Home.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/RTCEngine.cs">
     <Files>
-      <File FileName="Assets/Scripts/Home.cs" Line="97" Column="16" />
+      <File FileName="Assets/Scripts/RoomController.cs" Line="38" Column="27" />
+      <File FileName="Assets/Scripts/RTCEngine.cs" Line="239" Column="1" />
+      <File FileName="Assets/AgoraEngine/Demo/UIElementDragger.cs" Line="6" Column="18" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -10,14 +12,9 @@
             <Node name="Assets" expanded="True">
               <Node name="AgoraEngine" expanded="True">
                 <Node name="Demo" expanded="True" />
-                <Node name="Scripts" expanded="True">
-                  <Node name="AgoraGamingSDK" expanded="True">
-                    <Node name="videoRender" expanded="True" />
-                  </Node>
-                </Node>
               </Node>
               <Node name="Scripts" expanded="True">
-                <Node name="Home.cs" selected="True" />
+                <Node name="RTCEngine.cs" selected="True" />
               </Node>
             </Node>
           </Node>
@@ -27,7 +24,7 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="7aac3acc-5d8d-46aa-a557-4cd8c3260fd5" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="6a262374-cb9b-4c13-919e-0e81b8abb85e" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

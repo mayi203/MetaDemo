@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-
 using agora_gaming_rtc;
 using agora_utilities;
 
@@ -16,6 +15,7 @@ public class RTCEngine
     // instance of agora engine
     private IRtcEngine mRtcEngine;
     private Text MessageText;
+    private int mStreamId;
 
     // a token is a channel key that works with a AppID that requires it. 
     // Generate one by your token server or get a temporary token from the developer console
@@ -56,6 +56,7 @@ public class RTCEngine
             Debug.LogWarningFormat("Warning code:{0} msg:{1}", warn, IRtcEngine.GetErrorDescription(warn));
         };
         mRtcEngine.OnError = HandleError;
+        mRtcEngine.OnStreamMessage = HandleMessage;
 
         // enable video
         mRtcEngine.EnableVideo();
@@ -163,7 +164,7 @@ public class RTCEngine
 
     }
 
-    void HandleHelp()
+    void HandleHelp(  )
     {
 #if UNITY_2020_3_OR_NEWER && PLATFORM_STANDALONE_OSX
         // this very easy to forget for MacOS
@@ -177,6 +178,7 @@ public class RTCEngine
     private void onJoinChannelSuccess(string channelName, uint uid, int elapsed)
     {
         Debug.Log("JoinChannelSuccessHandler: uid = " + uid);
+        mStreamId = mRtcEngine.CreateDataStream(false,false);
         GameObject textVersionGameObject = GameObject.Find("VersionText");
         textVersionGameObject.GetComponent<Text>().text = "SDK Version : " + getSdkVersion();
         GameObject memberController = GameObject.Find("Controller");
@@ -263,12 +265,10 @@ public class RTCEngine
         // remove video stream
         Debug.Log("onUserOffline: uid = " + uid + " reason = " + reason);
         // this is called in main thread
-        GameObject go = GameObject.Find(uid.ToString());
-        if (!ReferenceEquals(go, null))
-        {
-            GameObject memberController = GameObject.Find("MemberPositions");
+        GameObject memberController = GameObject.Find("Controller");
+        if (!ReferenceEquals(memberController, null)) {
             memberController.GetComponent<RoomController>().RemoveUser(uid);
-            Object.Destroy(go);
+            memberController.GetComponent<RoomController>().RemoveVideo(uid);
         }
     }
 
@@ -307,4 +307,13 @@ public class RTCEngine
     }
 
     #endregion
+    public void sendMessage(byte[] data) {
+        int ret = mRtcEngine.SendStreamMessage(mStreamId, data);
+        Debug.Log("SendStreamMessage result: " + ret);
+    }
+    private void HandleMessage(uint userId, int streamId, byte[] data, int length) {
+        Debug.Log("HandleMessage: uid-"+userId);
+        GameObject memberController = GameObject.Find("Controller");
+        memberController.GetComponent<RoomController>().HandlerMessage(userId,data);
+    }
 }

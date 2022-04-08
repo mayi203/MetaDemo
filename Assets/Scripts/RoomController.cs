@@ -27,7 +27,7 @@ public class RoomController : MonoBehaviour
         member.name = MemberTag + uid.ToString();
         member.transform.SetParent(transform.Find("Members"));
         if (isMySelf) {
-            member.GetComponent<AvatarController>().enabled = true;
+            member.GetComponent<AvatarController>().setMySelf(true);
             member.transform.Find("Camera").gameObject.SetActive(true);
         }
         member.transform.Find("IdText").GetComponent<TextMesh>().text = uid.ToString();
@@ -56,10 +56,19 @@ public class RoomController : MonoBehaviour
     }
 
     private void RemoveObject(string tag) {
+        Debug.Log("RemoveObject: "+tag);
         GameObject go = GameObject.Find(tag);
         if (!ReferenceEquals(go, null))
         {
             Destroy(go);
+        }
+    }
+
+    public void HandlerMessage(uint uid,byte[] data) {
+        GameObject member = GameObject.Find(MemberTag+uid.ToString());
+        if (!ReferenceEquals(member, null)) {
+            AvatarController controller = member.GetComponent<AvatarController>();
+            controller.HandleMessage(data);
         }
     }
 }
